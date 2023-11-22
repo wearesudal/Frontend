@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import TheMainView from '../views/TheMainView.vue';
+import BoardDetailVue from '../views/BoardDetailView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,19 +34,13 @@ const router = createRouter({
       ],
     },
     {
-      path: '/board',
+      path: '/notice',
       name: 'notice',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/NoticeBoardView.vue'),
     },
     {
       path: '/faq',
       name: 'faq',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/FAQBoardView.vue'),
     },
     {
@@ -53,6 +48,11 @@ const router = createRouter({
       name: 'community',
       component: () => import('../views/CommunityBoardView.vue'),
     },
+    {
+      path: '/board/detail/:postIdx?',
+      name: 'boardDetail',
+      component: BoardDetailVue,
+    }
   ],
 });
 
