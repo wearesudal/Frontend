@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { localAxios } from "@/util/http-commons";
+import { useRouter } from 'vue-router';
 const ax = localAxios()
 const notices = ref([]);
+const router = useRouter();
 
 onMounted(() => {
   getNotices();
@@ -18,6 +20,11 @@ const getNotices = () => {
       console.log(error);
     });
 };
+
+function writeButtonDidClick() {
+  console.log("글쓰기 버튼 눌림");
+  router.push({name: 'boardWrite', params: { category: 'notice' }});
+}
 
 </script>
 
@@ -52,6 +59,9 @@ const getNotices = () => {
         </tr>
       </tbody>
     </table>
+    <div>
+      <button @click="writeButtonDidClick">글쓰기</button>
+    </div>
   </div>
 </template>
 

@@ -1,8 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { localAxios } from "@/util/http-commons";
+import { useRouter } from 'vue-router';
 const ax = localAxios()
 const questions = ref([]);
+const router = useRouter();
 
 onMounted(() => {
   getQuestions();
@@ -19,6 +21,9 @@ const getQuestions = () => {
     });
 };
 
+function writeButtonDidClick() {
+  router.push({name: 'boardWrite', params: { category: 'faq' }});
+}
 </script>
 
 <template>
@@ -52,6 +57,9 @@ const getQuestions = () => {
         </tr>
       </tbody>
     </table>
+    <div>
+      <button @click="writeButtonDidClick">글쓰기</button>
+    </div>
   </div>
 </template>
 
