@@ -9,6 +9,7 @@ let dongInfo = ref([]);
 let yearInfo = ref([]);
 let monthInfo = ref([]);
 let apartments = ref([]);
+const map = ref();
 
 onMounted(() => {
   getCities();
@@ -36,10 +37,10 @@ const getGuguns = () => {
       cityName: '서울특별시'
     }
   }).then(({ data }) => {
-      gugunInfo.value = data.data;
-    }).catch((error) => {
-      console.log(error);
-    });
+    gugunInfo.value = data.data;
+  }).catch((error) => {
+    console.log(error);
+  });
 }
 
 const getDongs = () => {
@@ -49,10 +50,10 @@ const getDongs = () => {
       gugunName: '강남구'
     }
   }).then(({ data }) => {
-      dongInfo.value = data.data;
-    }).catch((error) => {
-      console.log(error);
-    });
+    dongInfo.value = data.data;
+  }).catch((error) => {
+    console.log(error);
+  });
 }
 
 const setYearInfo = () => {
@@ -67,27 +68,52 @@ const setMonthInfo = () => {
   }
 }
 
-const getApartmentInfos = () => { 
-      ax.get("/map", {
-        params: {
-          sidoName: '서울특별시',
-          gugunName: '강남구',
-          dongName: '대치동',
-          dealYear: 2015,
-          dealMonth: 1
-        }
-      }).then(({ data }) => {
-        console.log(data);
-        apartments.value = data.data;
-      }).catch((error) => { 
-        console.log(error);
-      })
-    }
-
 watch(cityInfo => {
   console.log(cityInfo.value);
 })
-</script >
+
+const displayMarker = () => {
+  console.log("display : " + apartments.value.length)
+  console.log(apartments.value);
+  for (let i = 0; i < apartments.value.length; i++) {
+    let pos = apartments.value[i];
+    console.log(i + "번째 pos " + pos.lat + ", " + pos.lng);
+    var marker = new kakao.maps.Marker({
+      map: map.value,
+      position: new kakao.maps.LatLng(pos.lat, pos.lng)
+    });
+  }
+}
+
+const initMap = (lat, lng) => {
+  var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+  var options = {
+    //지도를 생성할 때 필요한 기본 옵션
+    center: new kakao.maps.LatLng(lat, lng), //지도의 중심좌표.
+    level: 4 //지도의 레벨(확대, 축소 정도)
+  };
+
+  map.value = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+}
+
+const getApartmentInfos = () => {
+  ax.get("/map", {
+    params: {
+      sidoName: '서울특별시',
+      gugunName: '강남구',
+      dongName: '대치동',
+      dealYear: 2015,
+      dealMonth: 1
+    }
+  }).then(({ data }) => {
+    apartments.value = data.data;
+    initMap(apartments.value[0].lat, apartments.value[0].lng);
+    displayMarker();
+  }).catch((error) => {
+    console.log(error);
+  })
+}
+</script>
 
 <template>
   <div align="center">
@@ -129,34 +155,34 @@ watch(cityInfo => {
     </div>
 
     <div>
-    <table class="table table-hover">
-      <colgroup>
-        <col>
-        <col>
-        <col>
-        <col>
-        <col>
-      </colgroup>
-      <thead>
-        <tr>
-          <th scope="col">순번</th>
-          <th scope="col">아파트명</th>
-          <th scope="col">층</th>
-          <th scope="col">전용면적</th>
-          <th scope="col">거래가격</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(apartment, idx) in apartments">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ apartment.apartmentName }}</td>
-          <td>{{ apartment.floor }}</td>
-          <td>{{ apartment.area }}</td>
-          <td>{{ apartment.dealAmount }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <table class="table table-hover">
+        <colgroup>
+          <col>
+          <col>
+          <col>
+          <col>
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">순번</th>
+            <th scope="col">아파트명</th>
+            <th scope="col">층</th>
+            <th scope="col">전용면적</th>
+            <th scope="col">거래가격</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(apartment, idx) in apartments">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ apartment.apartmentName }}</td>
+            <td>{{ apartment.floor }}</td>
+            <td>{{ apartment.area }}</td>
+            <td>{{ apartment.dealAmount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -164,7 +190,7 @@ watch(cityInfo => {
 export default {
   mounted() {
     window.kakao && window.kakao.maps
-      ? this.initMap()
+      ? this.initMap(37.450403, 126.655795)
       : this.addKakaoMapScript();
   },
   cityInfo() {
@@ -172,7 +198,7 @@ export default {
       cityOption: null,
       cityInfo: [],
     }
-   },
+  },
   methods: {
     addKakaoMapScript() {
       const script = document.createElement("script");
@@ -182,11 +208,11 @@ export default {
         "http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=본인이 발급받은 appkey 등록";
       document.head.appendChild(script);
     },
-    initMap() {
+    initMap(lat, lng) {
       var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
       var options = {
         //지도를 생성할 때 필요한 기본 옵션
-        center: new kakao.maps.LatLng(37.450403, 126.655795), //지도의 중심좌표.
+        center: new kakao.maps.LatLng(lat, lng), //지도의 중심좌표.
         level: 4 //지도의 레벨(확대, 축소 정도)
       };
 
