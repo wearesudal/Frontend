@@ -11,12 +11,16 @@ let monthInfo = ref([]);
 let apartments = ref([]);
 const map = ref();
 
+const selectedCity = ref('')
+const selectedGugun = ref('')
+const selectedDong = ref('')
+const selectedYear = ref('')
+const selectedMonth = ref('')
+
 onMounted(() => {
   getCities();
   getGuguns();
   getDongs();
-  // getGuguns();
-  // getDongs();
   setYearInfo();
   setMonthInfo();
 });
@@ -68,10 +72,6 @@ const setMonthInfo = () => {
   }
 }
 
-watch(cityInfo => {
-  console.log(cityInfo.value);
-})
-
 const displayMarker = () => {
   console.log("display : " + apartments.value.length)
   console.log(apartments.value);
@@ -99,11 +99,11 @@ const initMap = (lat, lng) => {
 const getApartmentInfos = () => {
   ax.get("/map", {
     params: {
-      sidoName: '서울특별시',
-      gugunName: '강남구',
-      dongName: '대치동',
-      dealYear: 2015,
-      dealMonth: 1
+      sidoName: selectedCity.value,
+      gugunName: selectedGugun.value,
+      dongName: selectedDong.value,
+      dealYear: selectedYear.value,
+      dealMonth: selectedMonth.value
     }
   }).then(({ data }) => {
     apartments.value = data.data;
@@ -121,27 +121,27 @@ const getApartmentInfos = () => {
     <br>
     <div>
       <div class="selectbox-container">
-        <select id="city" name="city" v-model="cityInfo">
+        <select id="city" name="city" v-model="selectedCity">
           <option v-for="city in cityInfo" :value="city.cityName">{{ city.cityName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="gugun" name="gugun" v-model="gugunInfo">
+        <select id="gugun" name="gugun" v-model="selectedGugun">
           <option v-for="gugun in gugunInfo" :value="gugun.gugunName">{{ gugun.gugunName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="dong" name="dong" v-model="dongInfo">
+        <select id="dong" name="dong" v-model="selectedDong">
           <option v-for="dong in dongInfo" :value="dong.dongName">{{ dong.dongName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="year" name="year" v-model="yearInfo">
+        <select id="year" name="year" v-model="selectedYear">
           <option v-for="year in yearInfo" :value="year" :label="year">{{ year }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="month" name="month" v-model="monthInfo">
+        <select id="month" name="month" v-model="selectedMonth">
           <option v-for="month in monthInfo" :value="month" :label="month">{{ month }}</option>
         </select>
       </div>
