@@ -242,29 +242,24 @@ table {
   border-collapse: collapse;
 }
 
-colgroup {
+col:nth-child(1) {
   width: 5%;
-  /* 전체 너비의 50%를 첫 번째 열에 할당 */
 }
 
 col:nth-child(2) {
   width: 50%;
-  /* 전체 너비의 30%를 두 번째 열에 할당 */
 }
 
 col:nth-child(3) {
   width: 5%;
-  /* 전체 너비의 10%를 세 번째 열에 할당 */
 }
 
 col:nth-child(4) {
   width: 20%;
-  /* 전체 너비의 10%를 네 번째 열에 할당 */
 }
 
 col:nth-child(5) {
-  width: 20;
-  /* 전체 너비의 10%를 네 번째 열에 할당 */
+  width: 20%;
 }
 
 

@@ -50,7 +50,7 @@ const router = createRouter({
       component: () => import('../views/CommunityBoardView.vue'),
     },
     {
-      path: '/board/detail/:postIdx?category',
+      path: '/board/detail/:postIdx?/:category?',
       name: 'boardDetail',
       component: BoardDetailVue,
     },
