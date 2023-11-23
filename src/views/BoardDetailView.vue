@@ -2,8 +2,10 @@
 import { ref, onMounted } from 'vue';
 import { localAxios } from "@/util/http-commons";
 import { useRoute } from "vue-router";
+import { useRouter } from 'vue-router';
 const ax = localAxios()
 const board = ref([]);
+const router = useRouter();
 
 onMounted(() => {
     getBoardDetail();
@@ -11,6 +13,9 @@ onMounted(() => {
 
 const route = useRoute();
 const postIdx = route.params.postIdx;
+let category = route.params.category;
+let title = "";
+let content = "";
 
 const getBoardDetail = () => {
     console.log("print detail");
@@ -33,6 +38,38 @@ const getBoardDetail = () => {
             console.log(error);
         });
 };
+
+const moveList = () => {
+  router.push({ name: 'main' });
+}
+
+const deleteButtonDidClick = () => {
+    ax.delete("/board", {
+        params: {
+            boardIdx: postIdx
+        }
+    }).then(data => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
+    moveList();
+}
+
+const updateButtonDidClick = () => { 
+    console.log("update");
+    ax.put("/board", {
+        postIdx: postIdx,
+        category: 'faq',
+        title: "title",
+        content: "content"
+    }).then(data => {
+        console.log(data);
+    }).catch((error) => {
+        console.log(error);
+    });
+    moveList();
+}
 </script>
 
 <template>
@@ -42,15 +79,15 @@ const getBoardDetail = () => {
             <table>
                 <tr>
                     <th class="title-cell">제목</th>
-                    <td>{{board.title}}</td>
+                    <td>{{ board.title }}</td>
                 </tr>
                 <tr>
                     <th class="title-cell">글 내용</th>
-                    <td>{{board.content}}</td>
+                    <td>{{ board.content }}</td>
                 </tr>
                 <tr>
                     <th class="title-cell">조회수</th>
-                    <td>{{board.hit}}</td>
+                    <td>{{ board.hit }}</td>
                 </tr>
                 <tr>
                     <th class="title-cell">작성자</th>
@@ -58,9 +95,16 @@ const getBoardDetail = () => {
                 </tr>
                 <tr>
                     <th class="title-cell">작성 시간</th>
-                    <td>{{board.createTime}}</td>
+                    <td>{{ board.createTime }}</td>
                 </tr>
             </table>
+        </div>
+        <br><br>
+        <div>
+            <button @click="deleteButtonDidClick">삭제하기</button>
+        </div>
+        <div>
+            <button @click="updateButtonDidClick">수정하기</button>
         </div>
     </div>
 </template>

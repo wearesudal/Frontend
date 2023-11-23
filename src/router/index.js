@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import TheMainView from '../views/TheMainView.vue';
 import BoardDetailVue from '../views/BoardDetailView.vue';
+import BoardWriteVue from '../views/BoardWriteView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,9 +50,14 @@ const router = createRouter({
       component: () => import('../views/CommunityBoardView.vue'),
     },
     {
-      path: '/board/detail/:postIdx?',
+      path: '/board/detail/:postIdx?category',
       name: 'boardDetail',
       component: BoardDetailVue,
+    },
+    {
+      path: '/board/write/:category?',
+      name: 'boardWrite',
+      component: BoardWriteVue,
     }
   ],
 });
