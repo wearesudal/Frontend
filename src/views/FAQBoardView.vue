@@ -48,7 +48,7 @@ function writeButtonDidClick() {
         <tr v-for="(question, idx) in questions">
           <td>{{ idx + 1 }}</td>
           <td>
-            <router-link :to="{ name: 'boardDetail', params: { postIdx: question.postIdx } }">
+            <router-link :to="{ name: 'boardDetail', params: { postIdx: question.postIdx, category: 'faq'} }">
               {{ question.title }}
             </router-link>
           </td>

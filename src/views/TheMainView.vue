@@ -129,7 +129,7 @@ watch(cityInfo => {
     </div>
 
     <div>
-    <table>
+    <table class="table table-hover">
       <colgroup>
         <col>
         <col>
