@@ -8,6 +8,7 @@ let gugunInfo = ref([]);
 let dongInfo = ref([]);
 let yearInfo = ref([]);
 let monthInfo = ref([]);
+let apartments = ref([]);
 
 onMounted(() => {
   getCities();
@@ -55,7 +56,7 @@ const getDongs = () => {
 }
 
 const setYearInfo = () => {
-  for (let i = 2014; i <= 2023; i++) {
+  for (let i = 2015; i <= 2023; i++) {
     yearInfo.value.push(i);
   }
 }
@@ -65,6 +66,23 @@ const setMonthInfo = () => {
     monthInfo.value.push(i);
   }
 }
+
+const getApartmentInfos = () => { 
+      ax.get("/map", {
+        params: {
+          sidoName: '서울특별시',
+          gugunName: '강남구',
+          dongName: '대치동',
+          dealYear: 2015,
+          dealMonth: 1
+        }
+      }).then(({ data }) => {
+        console.log(data);
+        apartments.value = data.data;
+      }).catch((error) => { 
+        console.log(error);
+      })
+    }
 
 watch(cityInfo => {
   console.log(cityInfo.value);
@@ -102,14 +120,43 @@ watch(cityInfo => {
         </select>
       </div>
       <div class="selectbox-container" id="searchInfo">
-        <button @click="searchRegion()">검색</button>
+        <button @click="getApartmentInfos()">검색</button>
       </div>
     </div>
 
     <br><br>
     <div id="map" class="map">
-
     </div>
+
+    <div>
+    <table>
+      <colgroup>
+        <col>
+        <col>
+        <col>
+        <col>
+        <col>
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">순번</th>
+          <th scope="col">아파트명</th>
+          <th scope="col">층</th>
+          <th scope="col">전용면적</th>
+          <th scope="col">거래가격</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(apartment, idx) in apartments">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ apartment.apartmentName }}</td>
+          <td>{{ apartment.floor }}</td>
+          <td>{{ apartment.area }}</td>
+          <td>{{ apartment.dealAmount }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   </div>
 </template>
 
@@ -144,9 +191,6 @@ export default {
       };
 
       var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-    },
-    searchRegion() {
-      console.log("search Region");
     }
   }
 };
@@ -161,5 +205,47 @@ export default {
 .selectbox-container {
   display: inline-block;
   margin-right: 20px;
+}
+
+mark.purple {
+  background: linear-gradient(to top, #c354ff 20%, transparent 30%);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+colgroup {
+  width: 5%;
+  /* 전체 너비의 50%를 첫 번째 열에 할당 */
+}
+
+col:nth-child(2) {
+  width: 50%;
+  /* 전체 너비의 30%를 두 번째 열에 할당 */
+}
+
+col:nth-child(3) {
+  width: 5%;
+  /* 전체 너비의 10%를 세 번째 열에 할당 */
+}
+
+col:nth-child(4) {
+  width: 20%;
+  /* 전체 너비의 10%를 네 번째 열에 할당 */
+}
+
+col:nth-child(5) {
+  width: 20;
+  /* 전체 너비의 10%를 네 번째 열에 할당 */
+}
+
+
+td,
+th {
+  border: 1px solid rgb(175, 190, 207);
+  padding: 8px;
+  text-align: center;
 }
 </style>
