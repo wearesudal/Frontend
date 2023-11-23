@@ -10,7 +10,6 @@
   const { changeMenuState } = menuStore;
 
   const logout = () => {
-    console.log('로그아웃!!!!');
     changeMenuState();
   };
 </script>
@@ -72,14 +71,12 @@
           />
           <button class="btn btn-outline-success" type="button">search</button>
         </form> -->
-        <!-- <ul class="navbar-nav ms-auto my-2 my-lg-0">
+        <ul class="navbar-nav ms-auto my-2 my-lg-0">
           <template v-for="menu in menuList" :key="menu.routeName">
             <template v-if="menu.show">
               <template v-if="menu.routeName === 'user-logout'">
                 <li class="nav-item">
-                  <router-link to="/" @click.prevent="logout" class="nav-link">{{
-                    menu.name
-                  }}</router-link>
+                  <router-link to="/" @click="logout" class="nav-link">{{ menu.name }}</router-link>
                 </li>
               </template>
               <template v-else>
@@ -91,7 +88,7 @@
               </template>
             </template>
           </template>
-        </ul> -->
+        </ul>
       </div>
     </div>
   </nav>

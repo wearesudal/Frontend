@@ -22,7 +22,7 @@ const router = createRouter({
           component: () => import('@/components/user/UserLogin.vue'),
         },
         {
-          path: 'join',
+          path: 'signup',
           name: 'user-join',
           component: () => import('@/components/user/UserJoin.vue'),
         },
@@ -58,7 +58,7 @@ const router = createRouter({
       path: '/board/write/:category?',
       name: 'boardWrite',
       component: BoardWriteVue,
-    }
+    },
   ],
 });
 

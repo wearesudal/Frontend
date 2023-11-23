@@ -1,4 +1,28 @@
-<script setup></script>
+<script setup>
+  import { localAxios } from '@/util/http-commons';
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+
+  const ax = localAxios();
+  const router = useRouter();
+  const id = ref('');
+  const pw = ref('');
+
+  const login = () => {
+    ax.post(`user/login`, {
+      userId: id.value,
+      userPass: pw.value,
+    })
+      .then((res) => {
+        router.push({ name: 'main' });
+        alert('로그인 되었습니다.');
+      })
+      .catch((e) => {
+        alert('로그인에 실패했습니다.');
+        console.log(e);
+      });
+  };
+</script>
 <template>
   <div class="container">
     <div class="row justify-content-center">
@@ -14,22 +38,18 @@
             <label class="form-check-label" for="saveid"> 아이디저장 </label>
           </div>
           <div class="mb-3 text-start">
-            <label for="userid" class="form-label">아이디 : </label>
-            <input
-              type="text"
-              class="form-control"
-              v-model="loginUser.userId"
-              placeholder="아이디..."
-            />
+            <label for="userId" class="form-label">아이디 : </label>
+            <input id="userId" type="text" class="form-control" v-model="id" placeholder="아이디" />
           </div>
           <div class="mb-3 text-start">
-            <label for="userpwd" class="form-label">비밀번호 : </label>
+            <label for="userPass" class="form-label">비밀번호 : </label>
             <input
+              id="userPass"
               type="password"
               class="form-control"
-              v-model="loginUser.userPwd"
+              v-model="pw"
               @keyup.enter="login"
-              placeholder="비밀번호..."
+              placeholder="비밀번호"
             />
           </div>
           <div class="col-auto text-center">

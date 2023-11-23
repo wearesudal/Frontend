@@ -1,31 +1,30 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { localAxios } from "@/util/http-commons";
-import { useRouter } from 'vue-router';
-const ax = localAxios()
-const notices = ref([]);
-const router = useRouter();
+  import { ref, onMounted } from 'vue';
+  import { localAxios } from '@/util/http-commons';
+  import { useRouter } from 'vue-router';
+  const ax = localAxios();
+  const notices = ref([]);
+  const router = useRouter();
 
-onMounted(() => {
-  getNotices();
-});
+  onMounted(() => {
+    getNotices();
+  });
 
-const getNotices = () => {
-  ax.get("/board/category?category=notice")
-    .then(({ data }) => {
-      console.log(data);
-      notices.value = data.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+  const getNotices = () => {
+    ax.get('/board/category?category=notice')
+      .then(({ data }) => {
+        console.log(data);
+        notices.value = data.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-function writeButtonDidClick() {
-  console.log("글쓰기 버튼 눌림");
-  router.push({name: 'boardWrite', params: { category: 'notice' }});
-}
-
+  function writeButtonDidClick() {
+    console.log('글쓰기 버튼 눌림');
+    router.push({ name: 'boardWrite', params: { category: 'notice' } });
+  }
 </script>
 
 <template>
@@ -33,10 +32,10 @@ function writeButtonDidClick() {
     <h3 align="center" style="font-weight: bold">🦦오기수달 공지사항🦦</h3>
     <table class="">
       <colgroup>
-        <col>
-        <col>
-        <col>
-        <col>
+        <col />
+        <col />
+        <col />
+        <col />
       </colgroup>
       <thead>
         <tr>
@@ -66,39 +65,39 @@ function writeButtonDidClick() {
 </template>
 
 <style>
-mark.purple {
-  background: linear-gradient(to top, #c354ff 20%, transparent 30%);
-}
+  mark.purple {
+    background: linear-gradient(to top, #c354ff 20%, transparent 30%);
+  }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-colgroup {
-  width: 10%;
-  /* 전체 너비의 50%를 첫 번째 열에 할당 */
-}
+  colgroup {
+    width: 10%;
+    /* 전체 너비의 50%를 첫 번째 열에 할당 */
+  }
 
-col:nth-child(2) {
-  width: 50%;
-  /* 전체 너비의 30%를 두 번째 열에 할당 */
-}
+  col:nth-child(2) {
+    width: 50%;
+    /* 전체 너비의 30%를 두 번째 열에 할당 */
+  }
 
-col:nth-child(3) {
-  width: 20%;
-  /* 전체 너비의 10%를 세 번째 열에 할당 */
-}
+  col:nth-child(3) {
+    width: 20%;
+    /* 전체 너비의 10%를 세 번째 열에 할당 */
+  }
 
-col:nth-child(4) {
-  width: 20%;
-  /* 전체 너비의 10%를 네 번째 열에 할당 */
-}
+  col:nth-child(4) {
+    width: 20%;
+    /* 전체 너비의 10%를 네 번째 열에 할당 */
+  }
 
-td,
-th {
-  border: 1px solid rgb(175, 190, 207);
-  padding: 8px;
-  text-align: center;
-}
+  td,
+  th {
+    border: 1px solid rgb(175, 190, 207);
+    padding: 8px;
+    text-align: center;
+  }
 </style>
