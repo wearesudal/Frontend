@@ -2,17 +2,69 @@
 import { ref, onMounted, watch } from 'vue';
 import { localAxios } from "@/util/http-commons";
 const ax = localAxios()
-const cityInfo = ref([]);
-const gugunInifo = ref([]);
-const dongInfo = ref([]);
-const dealYearInfo = ref([]);
-const dealMonthInfo = ref([]);
+
+let cityInfo = ref([]);
+let gugunInfo = ref([]);
+let dongInfo = ref([]);
+let yearInfo = ref([]);
+let monthInfo = ref([]);
 
 onMounted(() => {
-  console.log("mount됐음~");
+  getCities();
+  getGuguns();
+  getDongs();
+  // getGuguns();
+  // getDongs();
+  setYearInfo();
+  setMonthInfo();
 });
 
-const siInfo = ["서울특별시", "인천광역시", "부산광역시"];
+const getCities = () => {
+  ax.get("/map/info/city")
+    .then(({ data }) => {
+      cityInfo.value = data.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+const getGuguns = () => {
+  ax.get("/map/info/gugun", {
+    params: {
+      cityName: '서울특별시'
+    }
+  }).then(({ data }) => {
+      gugunInfo.value = data.data;
+    }).catch((error) => {
+      console.log(error);
+    });
+}
+
+const getDongs = () => {
+  ax.get("/map/info/dong", {
+    params: {
+      cityName: '서울특별시',
+      gugunName: '강남구'
+    }
+  }).then(({ data }) => {
+      dongInfo.value = data.data;
+    }).catch((error) => {
+      console.log(error);
+    });
+}
+
+const setYearInfo = () => {
+  for (let i = 2014; i <= 2023; i++) {
+    yearInfo.value.push(i);
+  }
+}
+
+const setMonthInfo = () => {
+  for (let i = 1; i <= 12; i++) {
+    monthInfo.value.push(i);
+  }
+}
 
 watch(cityInfo => {
   console.log(cityInfo.value);
@@ -21,45 +73,32 @@ watch(cityInfo => {
 
 <template>
   <div align="center">
-    <h1>🦦오기수달의 부동산🦦</h1>
+    <h1>🦦아기수달 부동산🦦</h1>
     <br>
     <div>
       <div class="selectbox-container">
-        <select id="si" name="si" v-model="cityInfo">
-          <option value="option1">선택</option>
-          <option v-for="info in siInfo" :value="info" :label="info">{{ info }}</option>
+        <select id="city" name="city" v-model="cityInfo">
+          <option v-for="city in cityInfo" :value="city.cityName">{{ city.cityName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="gugun" name="gugun">
-          <option value="option1">선택</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+        <select id="gugun" name="gugun" v-model="gugunInfo">
+          <option v-for="gugun in gugunInfo" :value="gugun.gugunName">{{ gugun.gugunName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="dong" name="dong">
-          <option value="option1">선택</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+        <select id="dong" name="dong" v-model="dongInfo">
+          <option v-for="dong in dongInfo" :value="dong.dongName">{{ dong.dongName }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="year" name="year">
-          <option value="option1">선택</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+        <select id="year" name="year" v-model="yearInfo">
+          <option v-for="year in yearInfo" :value="year" :label="year">{{ year }}</option>
         </select>
       </div>
       <div class="selectbox-container">
-        <select id="month" name="month">
-          <option value="option1">선택</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-          <option value="option3">Option 3</option>
+        <select id="month" name="month" v-model="monthInfo">
+          <option v-for="month in monthInfo" :value="month" :label="month">{{ month }}</option>
         </select>
       </div>
       <div class="selectbox-container" id="searchInfo">
@@ -81,6 +120,12 @@ export default {
       ? this.initMap()
       : this.addKakaoMapScript();
   },
+  cityInfo() {
+    return {
+      cityOption: null,
+      cityInfo: [],
+    }
+   },
   methods: {
     addKakaoMapScript() {
       const script = document.createElement("script");
