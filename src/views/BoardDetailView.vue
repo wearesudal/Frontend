@@ -57,18 +57,22 @@ const deleteButtonDidClick = () => {
 }
 
 const updateButtonDidClick = () => { 
-    console.log("update");
-    ax.put("/board", {
-        postIdx: postIdx,
-        category: 'faq',
-        title: "title",
-        content: "content"
-    }).then(data => {
-        console.log(data);
-    }).catch((error) => {
-        console.log(error);
-    });
-    moveList();
+    // console.log("update");
+    // ax.put("/board", {
+    //     postIdx: postIdx,
+    //     category: 'faq',
+    //     title: "title",
+    //     content: "content"
+    // }).then(data => {
+    //     console.log(data);
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
+    // moveList();
+    console.log("board");
+    console.log(board.value);
+    router.push({ name: 'boardUpdate', params: { boardInfo: board.value } });
+    // , params: {board.value});
 }
 </script>
 
@@ -102,9 +106,6 @@ const updateButtonDidClick = () => {
         <br><br>
         <div>
             <button @click="deleteButtonDidClick">삭제하기</button>
-        </div>
-        <div>
-            <button @click="updateButtonDidClick">수정하기</button>
         </div>
     </div>
 </template>
