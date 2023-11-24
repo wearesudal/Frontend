@@ -2,25 +2,37 @@
   import { localAxios } from '@/util/http-commons';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useUserStore } from '../stores/user';
 
   const ax = localAxios();
   const router = useRouter();
   const id = ref('');
   const pw = ref('');
 
+  const store = useUserStore();
+
   const login = () => {
     ax.post(`user/login`, {
       userId: id.value,
       userPass: pw.value,
     })
-      .then((res) => {
-        router.push({ name: 'main' });
+      .then((data) => {
+        console.log(data);
+        localStorage.setItem('accessToken', data.data.token);
+        localStorage.setItem('userIdx', data.data.userIdx);
+
+        store.setisLogin(true);
         alert('로그인 되었습니다.');
+        router.push({ name: 'main' });
       })
       .catch((e) => {
         alert('로그인에 실패했습니다.');
         console.log(e);
       });
+  };
+
+  const moveJoin = () => {
+    router.push({ name: 'signup' });
   };
 </script>
 <template>
@@ -56,7 +68,9 @@
             <button type="button" class="btn btn-outline-primary mb-3" @click="login">
               로그인
             </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3">회원가입</button>
+            <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="moveJoin">
+              회원가입
+            </button>
           </div>
         </form>
       </div>

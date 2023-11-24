@@ -18,20 +18,25 @@ const router = createRouter({
       children: [
         {
           path: 'login',
-          name: 'user-login',
+          name: 'login',
           component: () => import('@/components/user/UserLogin.vue'),
         },
         {
           path: 'signup',
-          name: 'user-join',
+          name: 'signup',
           component: () => import('@/components/user/UserJoin.vue'),
         },
         {
-          path: 'mypage',
-          name: 'user-mypage',
+          path: 'info',
+          name: 'info',
           //beforeEnter: onlyAuthUser,
           component: () => import('@/components/user/UserMyPage.vue'),
         },
+        // {
+        //   path: 'logout',
+        //   name: 'logout',
+        //   component: () => import('@/components/user/UserLogout.vue'),
+        // },
       ],
     },
     {

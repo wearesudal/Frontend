@@ -19,6 +19,7 @@
       console.log(res);
     });
   };
+  
 </script>
 
 <template>

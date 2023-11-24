@@ -1,16 +1,38 @@
 <script setup>
-  import { useMenuStore } from '../stores/menu.js';
+  // import { useMenuStore } from '../stores/menu.js';
   import { storeToRefs } from 'pinia';
+  import { useRouter } from 'vue-router';
+  // import { ref } from 'vue';
+  import { useUserStore } from '../stores/user';
 
-  const menuStore = useMenuStore();
+  const userStore = useUserStore();
+  // const menuStore = useMenuStore();
+  const token = localStorage.getItem('accessToken');
+  const router = useRouter();
 
   // 반응형을 유지하면서 스토어에서 속성을 추출하려면, storeToRefs()를 사용
   // https://pinia.vuejs.kr/core-concepts/
-  const { menuList } = storeToRefs(menuStore);
-  const { changeMenuState } = menuStore;
+  // const { menuList } = storeToRefs(menuStore);
+  // const { changeMenuState } = menuStore;
+
+  const { isLogin } = storeToRefs(userStore);
+
+  const join = () => {
+    router.push('/user/signup');
+  };
+
+  const login = () => {
+    router.push('/user/login');
+  };
+
+  const info = () => {
+    router.push('/user/info');
+  };
 
   const logout = () => {
-    changeMenuState();
+    router.push('/');
+    localStorage.removeItem('accessToken');
+    router.go(0);
   };
 </script>
 
@@ -72,22 +94,14 @@
           <button class="btn btn-outline-success" type="button">search</button>
         </form> -->
         <ul class="navbar-nav ms-auto my-2 my-lg-0">
-          <template v-for="menu in menuList" :key="menu.routeName">
-            <template v-if="menu.show">
-              <template v-if="menu.routeName === 'user-logout'">
-                <li class="nav-item">
-                  <router-link to="/" @click="logout" class="nav-link">{{ menu.name }}</router-link>
-                </li>
-              </template>
-              <template v-else>
-                <li class="nav-item">
-                  <router-link :to="{ name: menu.routeName }" class="nav-link">{{
-                    menu.name
-                  }}</router-link>
-                </li>
-              </template>
-            </template>
-          </template>
+          <div v-if="isLogin || token" style="display: flex; gap: 10px">
+            <li class="nav-item" @click="info">내정보</li>
+            <li class="nav-item" @click="logout">로그아웃</li>
+          </div>
+          <div v-else style="display: flex; gap: 10px">
+            <li class="nav-item" @click="join">회원가입</li>
+            <li class="nav-item" @click="login">로그인</li>
+          </div>
         </ul>
       </div>
     </div>
