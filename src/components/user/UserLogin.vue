@@ -65,10 +65,20 @@
             />
           </div>
           <div class="col-auto text-center">
-            <button type="button" class="btn btn-outline-primary mb-3" @click="login">
+            <button
+              type="button"
+              class="btn ms-1 mb-3"
+              @click="login"
+              style="background-color: rgb(175, 190, 207)"
+            >
               로그인
             </button>
-            <button type="button" class="btn btn-outline-success ms-1 mb-3" @click="moveJoin">
+            <button
+              type="button"
+              class="btn ms-1 mb-3"
+              @click="moveJoin"
+              style="background-color: rgb(175, 190, 207)"
+            >
               회원가입
             </button>
           </div>

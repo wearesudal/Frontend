@@ -22,4 +22,9 @@ async function logout(success, fail) {
   await ax.post(`/user/logout`).then(success).catch(fail);
 }
 
-export { userConfirm, findByIdx, logout };
+const userDetail = () => {
+  ax.defaults.headers['Authorization'] = localStorage.getItem('AccessToken');
+  return ax.get(`/user/info`);
+};
+
+export { userConfirm, findByIdx, logout, userDetail };
